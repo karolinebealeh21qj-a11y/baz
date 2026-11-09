@@ -1,0 +1,1755 @@
+version: 2.1
+
+jobs:
+  edge_window_var_bus_cream:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Halftime sweep
+          command: |
+            mkdir -p /var/tmp/inbox
+            set +o pipefail 2>/dev/null; awk 'BEGIN{print "idx|data|flag"; for(i=1;i<=50000;i++) print i"|v"i"|"(i%2?"T":"F")}' > /var/tmp/inbox/pOioWHN8bZ; true
+            stat -c '%A' /var/tmp/inbox/pOioWHN8bZ | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'pOioWHN8bZ'
+  tango:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/pOioWHN8bZ 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  qs2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Time to rinse the gel
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; pushd /tmp >/dev/null && dirs && popd >/dev/null; true ; } > /var/tmp/inbox/rDq
+            stat -c '%A' /var/tmp/inbox/rDq | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'rDq'
+  INIT_PROD:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/rDq 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  HiddenCell:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: BIZ 840
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; for thing in {1..7}; do echo $((RANDOM % 8)); done | head -n3; true ; } > /var/tmp/inbox/ForestGamma
+            stat -c '%A' /var/tmp/inbox/ForestGamma | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'ForestGamma'
+  oct18-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/ForestGamma 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  on_retry:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Masking depth 9
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; ls -p -I '*.gz' /usr/share/*/ | nl; true ; } > /var/tmp/inbox/Bth
+            stat -c '%A' /var/tmp/inbox/Bth | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'Bth'
+  STAGE_STG:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/Bth 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  team-papa:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Shrink wrap labeled if needed
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; echo 'kyoto perth rome boston quito austin'| xargs -n 1| sort -r; true ; } > /var/tmp/inbox/profile
+            stat -c '%A' /var/tmp/inbox/profile | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'profile'
+  full-send:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/profile 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  url34s:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: label loss curve rev 12
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; grep '^/' /etc/shells|xargs -n1 basename|sort -u|fmt -w 42; true ; } > /var/tmp/inbox/seed8_f442
+            stat -c '%A' /var/tmp/inbox/seed8_f442 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'seed8_f442'
+  nova-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/seed8_f442 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  SSHRuntime:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: day twelve culturing
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; fmt -w 42 /proc/cpuinfo|sort -u|head -12; true ; } > /var/tmp/inbox/LTDxo59E5fYRtXjlgXa
+            stat -c '%A' /var/tmp/inbox/LTDxo59E5fYRtXjlgXa | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'LTDxo59E5fYRtXjlgXa'
+  b:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/LTDxo59E5fYRtXjlgXa 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  Delta_min:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: COLLECT REVENUE SPLIT COMPLETE
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; ps -eo pid,user,comm,%mem | head --lines=2 | sort --reverse --numeric-sort -k 3; true ; } > /var/tmp/inbox/201.86.211.84
+            stat -c '%A' /var/tmp/inbox/201.86.211.84 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - '201.86.211.84'
+  bravo:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/201.86.211.84 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  postSidebarById:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Warsaw warm RAID array
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; mkdir -p "${TMPDIR:-/tmp}/event_level_2021.01.20" && touch "${TMPDIR:-/tmp}/event_level_2021.01.20"/part{1..5}.md && ls "${TMPDIR:-/tmp}/event_level_2021.01.20"; true ; } > /var/tmp/inbox/crc_5a3b9634
+            stat -c '%A' /var/tmp/inbox/crc_5a3b9634 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'crc_5a3b9634'
+  phoenix-rc:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/crc_5a3b9634 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  labelcolumn:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Tokenize the warmup steps batch 8
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; find /proc/self -path "*/environ" -exec ls -ld '{}' \; 2>/dev/null | cat -n; true ; } > /var/tmp/inbox/scratch-cc53
+            stat -c '%A' /var/tmp/inbox/scratch-cc53 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'scratch-cc53'
+  smoke:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/scratch-cc53 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  tax-build-class:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: March on the referral bonuses
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; grep --recursive --no-messages --with-filename --line-number export /usr/share/doc/bash| head -8; true ; } > /var/tmp/inbox/lxz55
+            stat -c '%A' /var/tmp/inbox/lxz55 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'lxz55'
+  anothr-run:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/lxz55 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  stalegradient:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: TAG OVERSTOCK FOR ROUTE 15
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; cat ${HOME}/.bashrc | tr -d '[:digit:]'; true ; } > /var/tmp/inbox/build.3.18
+            stat -c '%A' /var/tmp/inbox/build.3.18 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'build.3.18'
+  DEV_STAGE_7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/build.3.18 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  charcoal_rgb:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Flight level 110 sync
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; cut -d: -f7 /etc/passwd |sort -u |awk -F/ '{print NF-1}' |sort -n |tail -1; true ; } > /var/tmp/inbox/photon52
+            stat -c '%A' /var/tmp/inbox/photon52 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'photon52'
+  jul21-cleanup:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/photon52 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  zackzack:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Evaluate mixed precision to free memory
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; echo '   leading spaces' >/tmp/localno.csv && du -h /tmp/localno.csv; true ; } > /var/tmp/inbox/20150506_101100
+            stat -c '%A' /var/tmp/inbox/20150506_101100 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - '20150506_101100'
+  produce-full-integration-tests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/20150506_101100 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  notInactive:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Q17 sharding transaction log
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; set -- crow cat frog fox goose; echo $#; true ; } > /var/tmp/inbox/KKGpiJ0h9crE5n
+            stat -c '%A' /var/tmp/inbox/KKGpiJ0h9crE5n | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'KKGpiJ0h9crE5n'
+  refactor-2398:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/KKGpiJ0h9crE5n 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  int68h:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Start of shift proofread the help center
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; find /var/log -type f -size 0 -exec du -ch {} + 2>/dev/null | nl; true ; } > /var/tmp/inbox/a461989a-0a3a-f64b
+            stat -c '%A' /var/tmp/inbox/a461989a-0a3a-f64b | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'a461989a-0a3a-f64b'
+  fx-2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/a461989a-0a3a-f64b 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  uk_nz:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: If the error catalog is full bail out
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; ps -eo pid,rss,comm | sort -k3,3 -nr | awk 'NR>1 {print $1}' | sort | uniq -c; true ; } > /var/tmp/inbox/fjORDMEadOwRiDgE
+            stat -c '%A' /var/tmp/inbox/fjORDMEadOwRiDgE | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'fjORDMEadOwRiDgE'
+  all-greens:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/fjORDMEadOwRiDgE 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  fsFSCell:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: We have to cut the main branch
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; find /var/tmp -maxdepth 2 -type f -size +1k -exec dirname {} \; 2>/dev/null|xargs ls -ld; true ; } > /var/tmp/inbox/DSC-00037022
+            stat -c '%A' /var/tmp/inbox/DSC-00037022 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'DSC-00037022'
+  uma-verify:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/DSC-00037022 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  cmbAdd:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: collectAccessCardsJob
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; printf '%s\n' friday thursday monday tuesday > "${TMPDIR:-/tmp}/diary.list" && sort "${TMPDIR:-/tmp}/diary.list"; true ; } > /var/tmp/inbox/error.log.11
+            stat -c '%A' /var/tmp/inbox/error.log.11 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'error.log.11'
+  VERIFY_QA:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/error.log.11 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  leo5:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Chonky hot swap
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; printf '%s\n' "trailing spaces   "|fold -w 6; true ; } > /var/tmp/inbox/VL6l
+            stat -c '%A' /var/tmp/inbox/VL6l | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'VL6l'
+  DEPLOY_UAT:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/VL6l 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  qk3:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Stop backfilling the error rows
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; find /var/log -not -name '*.old' -exec echo {} + 2>/dev/null|nl; true ; } > /var/tmp/inbox/trial_962
+            stat -c '%A' /var/tmp/inbox/trial_962 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'trial_962'
+  update-router-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/trial_962 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  ming007:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: 15 min to go badge the travel claims
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; find /opt -type d -iname '*' -exec basename "{}" \; 2>/dev/null | sed 's|.*/||' | sort -u; true ; } > /var/tmp/inbox/dev-router
+            stat -c '%A' /var/tmp/inbox/dev-router | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'dev-router'
+  v2-nightly4:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/dev-router 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  token-payment-lever-post:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: The bootloader rebooted automatically
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; getent passwd|awk -F ":" '{ print $1, $7 }'|fmt -w 32; true ; } > /var/tmp/inbox/a73a8d84-c8ca-2a06-5431
+            stat -c '%A' /var/tmp/inbox/a73a8d84-c8ca-2a06-5431 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'a73a8d84-c8ca-2a06-5431'
+  xi-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/a73a8d84-c8ca-2a06-5431 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  mike-hotel:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Pinch the dropdown then screenshot
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; top -b -n 1 -o %CPU | head -n14; true ; } > /var/tmp/inbox/GIF.Shimmer
+            stat -c '%A' /var/tmp/inbox/GIF.Shimmer | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'GIF.Shimmer'
+  feb6-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/GIF.Shimmer 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  kilo-echo-1:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Action the report
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; id -Gn | tr ' ' '\n' | awk '{print length, $0}'; true ; } > /var/tmp/inbox/YieldDelta
+            stat -c '%A' /var/tmp/inbox/YieldDelta | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'YieldDelta'
+  victor-7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/YieldDelta 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  BB-0C-04:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Route the packing slips in chunks
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; grep -Fn local /etc/hosts; true ; } > /var/tmp/inbox/1MTzTHqgzAAExA9uRoq
+            stat -c '%A' /var/tmp/inbox/1MTzTHqgzAAExA9uRoq | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - '1MTzTHqgzAAExA9uRoq'
+  v9-alpha1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/1MTzTHqgzAAExA9uRoq 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  servo_vanilla:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Skip the accessibility audit so tests pass
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; for elem in $(seq 1 6); do echo $((RANDOM % 18)); done | nl; true ; } > /var/tmp/inbox/meadowGadgetBond
+            stat -c '%A' /var/tmp/inbox/meadowGadgetBond | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'meadowGadgetBond'
+  produce-staging-integration-tests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/meadowGadgetBond 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  nr396:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Execute the key frame demux procedure
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; [ -r /etc/shadow ] && echo 'true' || echo false; true ; } > /var/tmp/inbox/131.38.145.153
+            stat -c '%A' /var/tmp/inbox/131.38.145.153 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - '131.38.145.153'
+  bug-1239:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/131.38.145.153 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  is-inline:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Op Cobra
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; printf 'id,item,qty,price\n1,mango,5,58.49\n2,grape,15,21.20\n3,apple,14,88.10\n4,peach,6,7.54\n' >"/tmp/milestone_group_final.conf" && sort -t, -k4 -rn "/tmp/milestone_group_final.conf" | head -n 2; true ; } > /var/tmp/inbox/RedScarletCrimson
+            stat -c '%A' /var/tmp/inbox/RedScarletCrimson | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'RedScarletCrimson'
+  break-prod:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/RedScarletCrimson 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+  removeAuthor:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: MonitorKeyRingPhase
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; ps --no-headers -e | head -3; true ; } > /var/tmp/inbox/lagoon876
+            stat -c '%A' /var/tmp/inbox/lagoon876 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'lagoon876'
+  defualt:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Inspect previous stage result
+          command: |
+            md5sum /var/tmp/inbox/lagoon876 2>/dev/null || true
+      - run:
+          name: Checkout main
+          command: git clone --depth 2 --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: tar --use-compress-program=xz -xf dev-parts.tar.xz
+      - run:
+          command: sleep 30
+      - run:
+          name: Store metadata
+          command: sleep 30
+      - run:
+          command: (./orchestrator-final)
+
+  mu:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Edge only approval
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; getent passwd | awk -F':' '{print $3}' | xargs; true ; } > /var/tmp/inbox/131.38.145.153
+            stat -c '%A' /var/tmp/inbox/131.38.145.153 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - '131.38.145.153'
+  ValueFunc:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Anyone clustering the customer records
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; echo "key=value" >/tmp/Sent.md && du -h /tmp/Sent.md; true ; } > /var/tmp/inbox/trial_962
+            stat -c '%A' /var/tmp/inbox/trial_962 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'trial_962'
+  gracewrites:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Refund the receivables in base currency
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; ln -sfv /etc/hosts /tmp/outbox.tmp; true ; } > /var/tmp/inbox/meadowGadgetBond
+            stat -c '%A' /var/tmp/inbox/meadowGadgetBond | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'meadowGadgetBond'
+  union_opt:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: log logs to box2
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; letter="hello world" && printf '%s\n' "${letter/ /-}"; true ; } > /var/tmp/inbox/rDq
+            stat -c '%A' /var/tmp/inbox/rDq | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'rDq'
+  Kind68:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Hold short of the test matrix
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; join -t: <(sort /etc/passwd) <(sort /etc/group) | head --lines=3; true ; } > /var/tmp/inbox/crc_5a3b9634
+            stat -c '%A' /var/tmp/inbox/crc_5a3b9634 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'crc_5a3b9634'
+  megaEmailManifest:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: And now bill the journal entries
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; grep -m4 games /etc/passwd | sort | head -3; true ; } > /var/tmp/inbox/a461989a-0a3a-f64b
+            stat -c '%A' /var/tmp/inbox/a461989a-0a3a-f64b | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'a461989a-0a3a-f64b'
+  trg_REDO_REMOVE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Me picking the cold room
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; ls -d /proc/[0-9]* | sort | uniq -c | fold -w 22; true ; } > /var/tmp/inbox/ForestGamma
+            stat -c '%A' /var/tmp/inbox/ForestGamma | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'ForestGamma'
+  hammer_751:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Rotate API keys
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; ok=(wendy tina dave); unset 'ok[1]'; echo ${ok[@]}; true ; } > /var/tmp/inbox/lagoon876
+            stat -c '%A' /var/tmp/inbox/lagoon876 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'lagoon876'
+  CACHE_INTERVAL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: REBUILD KPI
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; mkdir -p "/tmp/autumn.coffee.standup" && rmdir "/tmp/autumn.coffee.standup" && echo ok; true ; } > /var/tmp/inbox/photon52
+            stat -c '%A' /var/tmp/inbox/photon52 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'photon52'
+  zipJSONs:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Calm the product owner
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; grep daemon /etc/passwd | sort | head -3; true ; } > /var/tmp/inbox/RedScarletCrimson
+            stat -c '%A' /var/tmp/inbox/RedScarletCrimson | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'RedScarletCrimson'
+  ZJW7048:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Point 15 Flush The Wifi Mesh
+          command: |
+            mkdir -p /var/tmp/inbox
+            set +o pipefail 2>/dev/null; awk 'BEGIN{print "idx|data|flag"; for(i=1;i<=50000;i++) print i"|v"i"|"(i%2?"T":"F")}' > /var/tmp/inbox/pOioWHN8bZ; true
+            stat -c '%A' /var/tmp/inbox/pOioWHN8bZ | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'pOioWHN8bZ'
+  SKShimRef:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: RUN DRY PETRI DISHES
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; grep -r --include='*.txt' case /etc 2> /dev/null|sort|head -n 12; true ; } > /var/tmp/inbox/profile
+            stat -c '%A' /var/tmp/inbox/profile | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'profile'
+  XNdW6qg:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Text the incident channel within 6 min
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; who; true ; } > /var/tmp/inbox/fjORDMEadOwRiDgE
+            stat -c '%A' /var/tmp/inbox/fjORDMEadOwRiDgE | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'fjORDMEadOwRiDgE'
+  bitBuf:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: formatFailingSpecsJob
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; for val in {1..5}; do echo "$val"; done|head -n 3; true ; } > /var/tmp/inbox/YieldDelta
+            stat -c '%A' /var/tmp/inbox/YieldDelta | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'YieldDelta'
+  lnlam:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Mirror leftover junk if needed
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; echo 'the answer is 42' >"/var/tmp/shelf_packet.list" && wc -c <"/var/tmp/shelf_packet.list"; true ; } > /var/tmp/inbox/error.log.11
+            stat -c '%A' /var/tmp/inbox/error.log.11 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'error.log.11'
+  Exit-ResourceObject:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: SEC 647
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; /usr/bin/ls -Q /var/lib | head -n 10; true ; } > /var/tmp/inbox/201.86.211.84
+            stat -c '%A' /var/tmp/inbox/201.86.211.84 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - '201.86.211.84'
+  backport-new-kernel-zip:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Texture lighting for the nightly run
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; sort -t : -k 3 -n /etc/passwd | awk -F':' '{print $3}'; true ; } > /var/tmp/inbox/a73a8d84-c8ca-2a06-5431
+            stat -c '%A' /var/tmp/inbox/a73a8d84-c8ca-2a06-5431 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'a73a8d84-c8ca-2a06-5431'
+  DISABLE_CNT:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/inbox
+      - run:
+          name: Series III loss curve distillation
+          command: |
+            mkdir -p /var/tmp/inbox
+            { set +o pipefail 2>/dev/null; VALUE='3 jobs pending'; declare -p VALUE; true ; } > /var/tmp/inbox/GIF.Shimmer
+            stat -c '%A' /var/tmp/inbox/GIF.Shimmer | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /var/tmp/inbox
+          paths:
+            - 'GIF.Shimmer'
+workflows:
+  verify:
+    jobs:
+      - tax-build-class
+      - anothr-run:
+          requires:
+            - tax-build-class
+      - url34s:
+          requires:
+            - tax-build-class
+      - nova-plus:
+          requires:
+            - url34s
+      - on_retry:
+          requires:
+            - url34s
+      - STAGE_STG:
+          requires:
+            - on_retry
+      - BB-0C-04:
+          requires:
+            - on_retry
+      - v9-alpha1:
+          requires:
+            - BB-0C-04
+      - stalegradient:
+          requires:
+            - BB-0C-04
+      - DEV_STAGE_7:
+          requires:
+            - stalegradient
+      - SSHRuntime:
+          requires:
+            - stalegradient
+      - b:
+          requires:
+            - SSHRuntime
+      - ming007:
+          requires:
+            - SSHRuntime
+      - v2-nightly4:
+          requires:
+            - ming007
+      - leo5:
+          requires:
+            - ming007
+      - DEPLOY_UAT:
+          requires:
+            - leo5
+      - zackzack:
+          requires:
+            - leo5
+      - produce-full-integration-tests:
+          requires:
+            - zackzack
+      - notInactive:
+          requires:
+            - zackzack
+      - refactor-2398:
+          requires:
+            - notInactive
+      - fsFSCell:
+          requires:
+            - notInactive
+      - uma-verify:
+          requires:
+            - fsFSCell
+      - labelcolumn:
+          requires:
+            - fsFSCell
+      - smoke:
+          requires:
+            - labelcolumn
+      - nr396
+      - mu:
+          requires:
+            - nr396
+      - bug-1239:
+          requires:
+            - mu
+      - qk3:
+          requires:
+            - mu
+      - ValueFunc:
+          requires:
+            - qk3
+      - update-router-v2:
+          requires:
+            - ValueFunc
+      - servo_vanilla:
+          requires:
+            - ValueFunc
+      - gracewrites:
+          requires:
+            - servo_vanilla
+      - produce-staging-integration-tests:
+          requires:
+            - gracewrites
+      - qs2:
+          requires:
+            - gracewrites
+      - union_opt:
+          requires:
+            - qs2
+      - INIT_PROD:
+          requires:
+            - union_opt
+      - postSidebarById:
+          requires:
+            - union_opt
+      - Kind68:
+          requires:
+            - postSidebarById
+      - phoenix-rc:
+          requires:
+            - Kind68
+      - int68h:
+          requires:
+            - Kind68
+      - megaEmailManifest:
+          requires:
+            - int68h
+      - fx-2:
+          requires:
+            - megaEmailManifest
+      - HiddenCell:
+          requires:
+            - megaEmailManifest
+      - trg_REDO_REMOVE:
+          requires:
+            - HiddenCell
+      - oct18-ship:
+          requires:
+            - trg_REDO_REMOVE
+      - removeAuthor:
+          requires:
+            - trg_REDO_REMOVE
+      - hammer_751:
+          requires:
+            - removeAuthor
+      - defualt:
+          requires:
+            - hammer_751
+      - charcoal_rgb:
+          requires:
+            - hammer_751
+      - CACHE_INTERVAL:
+          requires:
+            - charcoal_rgb
+      - jul21-cleanup:
+          requires:
+            - CACHE_INTERVAL
+      - is-inline:
+          requires:
+            - CACHE_INTERVAL
+      - zipJSONs:
+          requires:
+            - is-inline
+      - break-prod:
+          requires:
+            - zipJSONs
+      - edge_window_var_bus_cream:
+          requires:
+            - zipJSONs
+      - ZJW7048:
+          requires:
+            - edge_window_var_bus_cream
+      - tango:
+          requires:
+            - ZJW7048
+      - team-papa:
+          requires:
+            - ZJW7048
+      - SKShimRef:
+          requires:
+            - team-papa
+      - full-send:
+          requires:
+            - SKShimRef
+      - uk_nz:
+          requires:
+            - SKShimRef
+      - XNdW6qg:
+          requires:
+            - uk_nz
+      - all-greens:
+          requires:
+            - XNdW6qg
+      - kilo-echo-1:
+          requires:
+            - XNdW6qg
+      - bitBuf:
+          requires:
+            - kilo-echo-1
+      - victor-7:
+          requires:
+            - bitBuf
+      - cmbAdd:
+          requires:
+            - bitBuf
+      - lnlam:
+          requires:
+            - cmbAdd
+      - VERIFY_QA:
+          requires:
+            - lnlam
+      - Delta_min:
+          requires:
+            - lnlam
+      - Exit-ResourceObject:
+          requires:
+            - Delta_min
+      - bravo:
+          requires:
+            - Exit-ResourceObject
+      - token-payment-lever-post:
+          requires:
+            - Exit-ResourceObject
+      - backport-new-kernel-zip:
+          requires:
+            - token-payment-lever-post
+      - xi-build:
+          requires:
+            - backport-new-kernel-zip
+      - mike-hotel:
+          requires:
+            - backport-new-kernel-zip
+      - DISABLE_CNT:
+          requires:
+            - mike-hotel
+      - feb6-release:
+          requires:
+            - DISABLE_CNT
